@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios Ciclos</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h3 {
+            text-align: center;
+            margin-top: 20px;
+            color: #38bdf8;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 650px;
+            margin: 30px auto;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            background: #334155;
+            color: white;
+        }
+
+        button {
+            width: 48%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        #ejecutar {
+            background: #22c55e;
+            color: white;
+        }
+
+        #verTests {
+            background: #3b82f6;
+            color: white;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        #resultados {
+            margin-top: 15px;
+            padding: 10px;
+            background: #334155;
+            border-radius: 6px;
+        }
+
+        #cajas {
+            margin-top: 20px;
+        }
+
+        #testResultados {
+            margin-top: 20px;
+            padding: 12px;
+            background: #020617;
+            border-left: 4px solid #3b82f6;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .passed {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .failed {
+            color: #ef4444;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+<body>
+
+    <h3>🌙 Ejercicios ciclos repetitivos</h3>
+
+    <div class="container">
+
+        <div class="input-group">
+            <label for="operacion">Operación:</label>
+
+            <select id="operacion">
+                <option value="">Selecciona una opción</option>
+                <option value="eje21">Matriz transpuesta</option>
+                <option value="eje22">Producto punto</option>
+                <option value="eje23">Convolución</option>
+                <option value="eje24">Búsqueda binaria</option>
+                <option value="eje25">Rotar vector</option>
+            </select>
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+            <button id="ejecutar">Ejecutar</button>
+            <button id="verTests">Ver Tests</button>
+        </div>
+
+        <div id="resultados">Resultados...</div>
+
+        <div id="cajas"></div>
+        
+        <div id="testResultados"></div>
+
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+
+</body>
+</html>
