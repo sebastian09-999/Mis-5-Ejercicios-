@@ -132,6 +132,7 @@ function getMockTests() {
 btnTests.onclick = async () => {
 
     const opcion = operacionSelect.value;
+    console.log("opcion", opcion); //prueba consola
 
     testResultados.innerHTML = "Cargando tests...";
 
@@ -141,12 +142,13 @@ btnTests.onclick = async () => {
 
         let data;
 
-        if (esLocal) {
-            const res = await fetch("http://localhost:3000/run-tests");
-            data = await res.json();
-        } else {
-            data = getMockTests();
-        }
+try {
+    const res = await fetch("http://localhost:3000/run-tests");
+    data = await res.json();
+} catch (error) {
+    console.log("Usando tests simulados");
+    data = getMockTests();
+}
 
         let html = "";
 
@@ -157,7 +159,7 @@ btnTests.onclick = async () => {
 
             data.testResults.forEach(test => {
 
-                const nombreArchivo = test.name.split("\\").pop();
+                const nombreArchivo = test.name.split(/[/\\]/).pop();
 
                 html += `<br>📁 ${nombreArchivo}<br>`;
 
@@ -171,9 +173,10 @@ btnTests.onclick = async () => {
         } else {
 
             // 🔥 SOLO UN EJERCICIO
-            const filtrados = data.testResults.filter(test =>
-                test.name.includes(opcion)
-            );
+            const filtrados = data.testResults.filter(test => {
+                const nombreArchivo = test.name.split(/[/\\]/).pop();
+                return nombreArchivo.includes(opcion);
+            });
 
             html += `<h4>Tests de ${opcion}</h4>`;
 
@@ -183,7 +186,7 @@ btnTests.onclick = async () => {
 
                 filtrados.forEach(test => {
 
-                    const nombreArchivo = test.name.split("\\").pop();
+                    const nombreArchivo = test.name.split(/[/\\]/).pop();
 
                     html += `<br>📁 ${nombreArchivo}<br>`;
 
@@ -204,7 +207,7 @@ btnTests.onclick = async () => {
 
         const data = getMockTests();
 
-        let html = `<h4>🧪 Tests (modo fallback)</h4>`;
+        let html = `<h4>🧪 Tests </h4>`;
 
         data.testResults.forEach(test => {
             html += `<br>📁 ${test.name}<br>`;
