@@ -133,38 +133,86 @@ btnTests.onclick = async () => {
 
     const opcion = operacionSelect.value;
 
-    if (!opcion) {
-        testResultados.innerHTML = "Selecciona un ejercicio primero";
-        return;
-    }
-
     testResultados.innerHTML = "Cargando tests...";
 
-    // 🧠 Detectar si estás en local
     const esLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1";
 
     try {
 
-        if (esLocal) {
-            // 🔵 USAR BACKEND REAL
-            const res = await fetch("http://localhost:3000/run-tests");
-            const data = await res.json();
+        let data;
 
-            renderTests(opcion, data);
+        if (esLocal) {
+            const res = await fetch("http://localhost:3000/run-tests");
+            data = await res.json();
+        } else {
+            data = getMockTests();
+        }
+
+        let html = "";
+
+        // 🔥 SI NO HAY SELECCIÓN → TODOS LOS TESTS
+        if (!opcion) {
+
+            html += `<h4>🧪 Todos los Tests</h4>`;
+
+            data.testResults.forEach(test => {
+
+                const nombreArchivo = test.name.split("\\").pop();
+
+                html += `<br>📁 ${nombreArchivo}<br>`;
+
+                test.assertions.forEach(a => {
+                    const estado = a.status === "passed" ? "🟢" : "🔴";
+                    html += `${estado} ${a.title}<br>`;
+                });
+
+            });
 
         } else {
-            // 🟢 USAR DATOS SIMULADOS
-            const data = getMockTests();
 
-            renderTests(opcion, data);
+            // 🔥 SOLO UN EJERCICIO
+            const filtrados = data.testResults.filter(test =>
+                test.name.includes(opcion)
+            );
+
+            html += `<h4>Tests de ${opcion}</h4>`;
+
+            if (filtrados.length === 0) {
+                html += "No hay tests para este ejercicio";
+            } else {
+
+                filtrados.forEach(test => {
+
+                    const nombreArchivo = test.name.split("\\").pop();
+
+                    html += `<br>📁 ${nombreArchivo}<br>`;
+
+                    test.assertions.forEach(a => {
+                        const estado = a.status === "passed" ? "🟢" : "🔴";
+                        html += `${estado} ${a.title}<br>`;
+                    });
+
+                });
+            }
         }
+
+        testResultados.innerHTML = html;
 
     } catch (error) {
 
-        console.error("Error real, usando mock:", error);
+        console.error(error);
 
-        // 🔁 fallback automático
         const data = getMockTests();
-        renderTests(opcion, data);
+
+        let html = `<h4>🧪 Tests (modo fallback)</h4>`;
+
+        data.testResults.forEach(test => {
+            html += `<br>📁 ${test.name}<br>`;
+            test.assertions.forEach(a => {
+                html += `🟢 ${a.title}<br>`;
+            });
+        });
+
+        testResultados.innerHTML = html;
     }
 };
